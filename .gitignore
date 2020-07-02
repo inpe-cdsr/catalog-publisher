@@ -3,7 +3,6 @@ env
 
 # repositories
 operation-dashboard
-operation-dashboard-backup
 
 # log files
 publisher.log
