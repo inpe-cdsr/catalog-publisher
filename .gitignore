@@ -1,5 +1,6 @@
 # env folder
-env
+env_files/*
+!env_files/*.EXAMPLE
 
 # repositories
 operation-dashboard
