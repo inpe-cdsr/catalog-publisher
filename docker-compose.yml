@@ -8,13 +8,13 @@ services:
 
   inpe_cdsr_publisher_dashboard:
     build:
-      context: ./operation-dashboard/docker
+      context: ../publisher-dashboard/docker
       dockerfile: ./Dockerfile
     container_name: inpe_cdsr_publisher_dashboard
     image: publisher-dashboard
     restart: always
     volumes:
-      - ./operation-dashboard:/app
+      - ../publisher-dashboard:/app
       - ./publisher:/publisher
       - /dados2/TIFF:/TIFF
     env_file:
