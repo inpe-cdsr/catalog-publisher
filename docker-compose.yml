@@ -18,7 +18,7 @@ services:
       - ./publisher:/publisher
       - /dados2/TIFF:/TIFF
     env_file:
-      - ./env/dashboard.env
+      - ./env_files/dashboard.env
     command: python index.py
     networks:
       - catalog_inpe_cdsr
@@ -50,7 +50,7 @@ services:
       - /dados2/TIFF:/TIFF
       - /dados1/ctxcomiss/Level-2:/Level-2
     env_file:
-      - ./env/publisher.env
+      - ./env_files/publisher.env
     environment:
       - "FLASK_APP=publisher"
     networks:
@@ -73,7 +73,7 @@ services:
       - /dados1/ctxcomiss/Level-2:/Level-2
       - /dados2/TIFF/comissionamento:/public
     env_file:
-      - ./env/publisher.env
+      - ./env_files/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q processing
     networks:
@@ -92,7 +92,7 @@ services:
       - ./:/app
       - /dados2/TIFF:/TIFF
     env_file:
-      - ./env/publisher.env
+      - ./env_files/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 6 -Q publish
     networks:
@@ -111,7 +111,7 @@ services:
       - ./:/app
       - /dados2/TIFF:/TIFF
     env_file:
-      - ./env/publisher.env
+      - ./env_files/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q quicklook
     networks:
@@ -130,7 +130,7 @@ services:
       - ./:/app
       - /dados2/TIFF:/TIFF
     env_file:
-      - ./env/publisher.env
+      - ./env_files/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q upload
     networks:
