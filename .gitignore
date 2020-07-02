@@ -1,5 +1,12 @@
+# env folder
 env
 
+# repositories
+operation-dashboard
+operation-dashboard-backup
+
+# log files
 publisher.log
 
+# python folders
 __pycache__
