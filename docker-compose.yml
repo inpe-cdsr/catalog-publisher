@@ -8,34 +8,34 @@ services:
 
   inpe_cdsr_publisher_dashboard:
     build:
-      context: ./dashboard/docker
+      context: ./operation-dashboard/docker
       dockerfile: ./Dockerfile
     container_name: inpe_cdsr_publisher_dashboard
     image: publisher-dashboard
     restart: always
     volumes:
-      - ./dashboard:/app
+      - ./operation-dashboard:/app
       - ./publisher:/publisher
       - /dados2/TIFF:/TIFF
     env_file:
       - ./env/dashboard.env
     command: python index.py
-    ports:
-      - 5004:8050
     networks:
       - catalog_inpe_cdsr
+    ports:
+      - 5004:8050
 
   inpe_cdsr_publisher_rabbitmq:
-    image: rabbitmq:3-management
     container_name: inpe_cdsr_publisher_rabbitmq
-    restart: "always"
-    ports:
-      - "15672:15672"
-      - "5672:5672"
+    image: rabbitmq:3-management
+    restart: always
     environment:
       - "TZ:America/Sao_Paulo"
     networks:
       - catalog_inpe_cdsr
+    ports:
+      - 15672:15672
+      - 5672:5672
 
   inpe_cdsr_publisher_api:
     build:
@@ -43,100 +43,98 @@ services:
       dockerfile: ./docker/Dockerfile
     container_name: inpe_cdsr_publisher_api
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
-    restart: "always"
+    restart: always
     user: 1648:100
+    volumes:
+      - ./:/app
+      - /dados2/TIFF:/TIFF
+      - /dados1/ctxcomiss/Level-2:/Level-2
     env_file:
       - ./env/publisher.env
     environment:
       - "FLASK_APP=publisher"
     networks:
       - catalog_inpe_cdsr
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./:/app
-      - /dados2/TIFF:/TIFF
-      - /dados1/ctxcomiss/Level-2:/Level-2
-    command: >
-      bash -c "flask run --host 0.0.0.0"
+    command: bash -c "flask run --host 0.0.0.0"
     depends_on:
       - inpe_cdsr_publisher_rabbitmq
+    ports:
+      - 5000:5000
 
-#  Celery
+  # celery - processing
   inpe_cdsr_publisher_worker_processing:
     container_name: inpe_cdsr_publisher_worker_processing
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
-    restart: "always"
+    restart: always
     user: 1648:100
-    depends_on:
-      - inpe_cdsr_publisher_rabbitmq
-      - inpe_cdsr_publisher_api
-    env_file:
-      - ./env/publisher.env
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
       - /dados1/ctxcomiss/Level-2:/Level-2
-
       - /dados2/TIFF/comissionamento:/public
+    env_file:
+      - ./env/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q processing
     networks:
       - catalog_inpe_cdsr
-
-#  Celery
-  inpe_cdsr_publisher_worker_publish:
-    container_name: inpe_cdsr_publisher_worker_publish
-    image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
-    restart: "always"
-    user: 1648:100
     depends_on:
       - inpe_cdsr_publisher_rabbitmq
       - inpe_cdsr_publisher_api
-    env_file:
-      - ./env/publisher.env
+
+  # celery - publish
+  inpe_cdsr_publisher_worker_publish:
+    container_name: inpe_cdsr_publisher_worker_publish
+    image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
+    restart: always
+    user: 1648:100
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
+    env_file:
+      - ./env/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 6 -Q publish
     networks:
       - catalog_inpe_cdsr
-    
-#  Celery
-  inpe_cdsr_publisher_worker_quicklook:
-    container_name: inpe_cdsr_publisher_worker_quicklook
-    image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
-    restart: "always"
-    user: 1648:100
     depends_on:
       - inpe_cdsr_publisher_rabbitmq
       - inpe_cdsr_publisher_api
-    env_file:
-      - ./env/publisher.env
+    
+  # celery - quicklook
+  inpe_cdsr_publisher_worker_quicklook:
+    container_name: inpe_cdsr_publisher_worker_quicklook
+    image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
+    restart: always
+    user: 1648:100
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
+    env_file:
+      - ./env/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q quicklook
     networks:
       - catalog_inpe_cdsr
-    
-#  Celery
-  inpe_cdsr_publisher_worker_upload:
-    container_name: inpe_cdsr_publisher_worker_upload
-    image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
-    restart: "always"
-    user: 1648:100
     depends_on:
       - inpe_cdsr_publisher_rabbitmq
       - inpe_cdsr_publisher_api
-    env_file:
-      - ./env/publisher.env
+    
+  # celery - upload
+  inpe_cdsr_publisher_worker_upload:
+    container_name: inpe_cdsr_publisher_worker_upload
+    image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
+    restart: always
+    user: 1648:100
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
+    env_file:
+      - ./env/publisher.env
     command: >
       celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q upload
     networks:
       - catalog_inpe_cdsr
+    depends_on:
+      - inpe_cdsr_publisher_rabbitmq
+      - inpe_cdsr_publisher_api
