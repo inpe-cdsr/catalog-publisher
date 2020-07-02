@@ -4,6 +4,8 @@ env_files/*
 
 # repositories
 operation-dashboard
+publisher
+publisher-backup
 
 # log files
 publisher.log
