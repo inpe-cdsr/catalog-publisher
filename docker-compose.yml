@@ -44,11 +44,11 @@ services:
     container_name: inpe_cdsr_publisher_api
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 1648:100
+    user: 2004:2004
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
-      - /dados1/ctxcomiss/Level-2:/Level-2
+      - /dados2/Level-2:/Level-2
     env_file:
       - ./env_files/publisher.env
     environment:
@@ -66,12 +66,12 @@ services:
     container_name: inpe_cdsr_publisher_worker_processing
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 1648:100
+    user: 2004:2004
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
-      - /dados1/ctxcomiss/Level-2:/Level-2
-      - /dados2/TIFF/comissionamento:/public
+      - /dados2/Level-2:/Level-2
+      - /dados2/TIFF:/public
     env_file:
       - ./env_files/publisher.env
     command: >
@@ -87,7 +87,7 @@ services:
     container_name: inpe_cdsr_publisher_worker_publish
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 1648:100
+    user: 2004:2004
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
@@ -106,7 +106,7 @@ services:
     container_name: inpe_cdsr_publisher_worker_quicklook
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 1648:100
+    user: 2004:2004
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
@@ -125,7 +125,7 @@ services:
     container_name: inpe_cdsr_publisher_worker_upload
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 1648:100
+    user: 2004:2004
     volumes:
       - ./:/app
       - /dados2/TIFF:/TIFF
