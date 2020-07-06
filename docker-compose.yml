@@ -16,7 +16,7 @@ services:
     volumes:
       - ../publisher-dashboard:/app
       - ./publisher:/publisher
-      - /dados2/TIFF:/TIFF
+      - ${DATA_TIFF}:/TIFF
     env_file:
       - ./env_files/dashboard.env
     command: python index.py
@@ -47,7 +47,7 @@ services:
     user: 2004:2004
     volumes:
       - ./:/app
-      - /dados2/TIFF:/TIFF
+      - ${DATA_TIFF}:/TIFF
       - /dados2/Level-2:/Level-2
     env_file:
       - ./env_files/publisher.env
@@ -69,9 +69,9 @@ services:
     user: 2004:2004
     volumes:
       - ./:/app
-      - /dados2/TIFF:/TIFF
+      - ${DATA_TIFF}:/TIFF
       - /dados2/Level-2:/Level-2
-      - /dados2/TIFF:/public
+      - ${DATA_TIFF}:/public
     env_file:
       - ./env_files/publisher.env
     command: >
@@ -90,7 +90,7 @@ services:
     user: 2004:2004
     volumes:
       - ./:/app
-      - /dados2/TIFF:/TIFF
+      - ${DATA_TIFF}:/TIFF
     env_file:
       - ./env_files/publisher.env
     command: >
@@ -109,7 +109,7 @@ services:
     user: 2004:2004
     volumes:
       - ./:/app
-      - /dados2/TIFF:/TIFF
+      - ${DATA_TIFF}:/TIFF
     env_file:
       - ./env_files/publisher.env
     command: >
@@ -128,7 +128,7 @@ services:
     user: 2004:2004
     volumes:
       - ./:/app
-      - /dados2/TIFF:/TIFF
+      - ${DATA_TIFF}:/TIFF
     env_file:
       - ./env_files/publisher.env
     command: >
