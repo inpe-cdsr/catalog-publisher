@@ -44,7 +44,7 @@ services:
     container_name: inpe_cdsr_publisher_api
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 2004:2004
+    user: ${UID}:${GID}
     volumes:
       - ./:/app
       - ${INPE_CDSR_DATA}/TIFF:/TIFF
@@ -66,7 +66,7 @@ services:
     container_name: inpe_cdsr_publisher_worker_processing
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 2004:2004
+    user: ${UID}:${GID}
     volumes:
       - ./:/app
       - ${INPE_CDSR_DATA}/TIFF:/TIFF
@@ -87,7 +87,7 @@ services:
     container_name: inpe_cdsr_publisher_worker_publish
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 2004:2004
+    user: ${UID}:${GID}
     volumes:
       - ./:/app
       - ${INPE_CDSR_DATA}/TIFF:/TIFF
@@ -106,7 +106,7 @@ services:
     container_name: inpe_cdsr_publisher_worker_quicklook
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 2004:2004
+    user: ${UID}:${GID}
     volumes:
       - ./:/app
       - ${INPE_CDSR_DATA}/TIFF:/TIFF
@@ -125,7 +125,7 @@ services:
     container_name: inpe_cdsr_publisher_worker_upload
     image: registry.dpi.inpe.br/brazildatacube/publisher:0.0.1-celery
     restart: always
-    user: 2004:2004
+    user: ${UID}:${GID}
     volumes:
       - ./:/app
       - ${INPE_CDSR_DATA}/TIFF:/TIFF
