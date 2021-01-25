@@ -75,7 +75,7 @@ services:
     env_file:
       - ./env_files/publisher.env
     command: >
-      celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q processing
+      celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 6 -Q processing
     networks:
       - catalog_inpe_cdsr
     depends_on:
@@ -94,7 +94,7 @@ services:
     env_file:
       - ./env_files/publisher.env
     command: >
-      celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 6 -Q publish
+      celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 2 -Q publish
     networks:
       - catalog_inpe_cdsr
     depends_on:
@@ -113,7 +113,7 @@ services:
     env_file:
       - ./env_files/publisher.env
     command: >
-      celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 4 -Q quicklook
+      celery -A publisher.celery.worker:celery worker --heartbeat-interval 480 -l INFO --concurrency 6 -Q quicklook
     networks:
       - catalog_inpe_cdsr
     depends_on:
